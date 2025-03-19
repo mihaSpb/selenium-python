@@ -4,7 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 def init_driver():
-    # Инициализация драйвера ChromeDriver и возврат его с заданными параметрами
+    # Инициализация драйвера ChromeDriver и возврат его с заданными параметрами.
     options = webdriver.ChromeOptions()
     options.add_experimental_option('detach', True)
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
@@ -12,7 +12,7 @@ def init_driver():
 
 
 def launch_browser(driver, url):
-    # Запуск браузера с указанным URL
+    # Запуск браузера с указанным URL.
     driver.get(url)
     driver.set_window_size(1920, 1080)
 
@@ -20,7 +20,7 @@ def launch_browser(driver, url):
 def main():
     default_url = "https://www.saucedemo.com/"
     user_input = input(f"Введите URL для открытия (по умолчанию: {default_url}): ").strip()
-    # Если пользователь ничего не ввёл, используем URL по умолчанию
+    # Если пользователь ничего не ввёл, используем URL по умолчанию.
     url_to_open = user_input if user_input else default_url
 
     driver = init_driver()
