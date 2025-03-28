@@ -44,6 +44,7 @@ class EdgeBrowser(BaseBrowser):
     @staticmethod
     def init_driver():
         options = webdriver.EdgeOptions()
+        options.binary_location = "/Volumes/SSD/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"
         return webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()), options=options)
 
 
@@ -55,6 +56,7 @@ class FirefoxBrowser(BaseBrowser):
     @staticmethod
     def init_driver():
         options = webdriver.FirefoxOptions()
+        options.binary_location = "/Volumes/SSD/Applications/Firefox.app/Contents/MacOS/firefox"
         return webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
 
 
