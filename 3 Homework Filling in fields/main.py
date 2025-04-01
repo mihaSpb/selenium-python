@@ -1,24 +1,9 @@
+# Импортируем класс BaseBrowser из папки classes
+from clasases.BaseBrowser import BaseBrowser
+from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
-
-
-class BaseBrowser:
-    def __init__(self, url: str):
-        self.url = url
-        self.driver = None
-
-    def launch(self):
-        if self.driver:
-            self.driver.get(self.url)
-            self.driver.set_window_size(1920, 1080)
-        else:
-            raise RuntimeError("Драйвер не инициализирован!")
-
-    def close(self):
-        if self.driver:
-            self.driver.quit()
-
 
 class ChromeBrowser(BaseBrowser):
     def __init__(self, url: str):
@@ -29,8 +14,9 @@ class ChromeBrowser(BaseBrowser):
     def init_driver():
         options = webdriver.ChromeOptions()
         options.add_experimental_option('detach', False)
-        return webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-
+        return webdriver.Chrome(
+            service=ChromeService(ChromeDriverManager().install()), options=options
+        )
 
 def wait_for_enter():
     input("Нажмите Enter, чтобы закрыть браузер и продолжить...")
@@ -42,5 +28,14 @@ if __name__ == "__main__":
     # Запуск Chrome
     chrome_browser = ChromeBrowser(default_url)
     chrome_browser.launch()
+
+    # Заполнение поля логин
+    user_name = chrome_browser.driver.find_element(By.ID,"user-name")
+    user_name.send_keys("standard_user")
+
+    # Заполнение поля пароль
+    user_password = chrome_browser.driver.find_element(By.ID,"password")
+    user_password.send_keys("secret_sauce")
+
     wait_for_enter()
     chrome_browser.close()
