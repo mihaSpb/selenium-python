@@ -1,4 +1,4 @@
-# Импортируем класс BaseBrowser из папки сlasses
+# Импортируем класс BaseBrowser из папки classes
 from clasases.BaseBrowser import BaseBrowser
 from selenium.webdriver.common.by import By
 from selenium import webdriver
