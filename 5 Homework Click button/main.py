@@ -11,16 +11,12 @@ class ChromeBrowser(BaseBrowser):
         super().__init__(url)
         self.driver = self.init_driver()
 
-    @staticmethod
-    def init_driver():
+    def init_driver(self):
         options = webdriver.ChromeOptions()
         options.add_experimental_option('detach', False)
         return webdriver.Chrome(
             service=ChromeService(ChromeDriverManager().install()), options=options
         )
-
-def wait_for_enter():
-    input("Нажмите Enter, чтобы закрыть браузер и продолжить...")
 
 
 if __name__ == "__main__":
@@ -50,5 +46,5 @@ if __name__ == "__main__":
     button_login = chrome_browser.driver.find_element(By.XPATH, "//input[@id='login-button']")
     button_login.click()
 
-    wait_for_enter()
+    chrome_browser.wait_for_enter()
     chrome_browser.close()
