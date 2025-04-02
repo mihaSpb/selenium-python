@@ -78,6 +78,3 @@ if __name__ == "__main__":
     test_button_login()
     test_current_url()
     test_element('Products')
-
-    chrome_browser.wait_for_enter()
-    chrome_browser.close()
