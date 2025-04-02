@@ -14,5 +14,6 @@ class BaseBrowser:
         if self.driver:
             self.driver.quit()
 
-    def wait_for_enter(self):
+    @staticmethod
+    def wait_for_enter():
         input("Нажмите Enter, чтобы закрыть браузер и продолжить...")
