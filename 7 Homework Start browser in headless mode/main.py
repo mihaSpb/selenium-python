@@ -15,8 +15,6 @@ class ChromeBrowser(BaseBrowser):
     def __init_driver(self):
         options = webdriver.ChromeOptions()
         options.add_experimental_option('detach', False)
-        # Запуск браузера в headless режиме
-        options.add_argument("--headless")
         return webdriver.Chrome(
             service=ChromeService(ChromeDriverManager().install()), options=options
         )
