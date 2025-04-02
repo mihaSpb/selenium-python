@@ -46,4 +46,3 @@ if __name__ == "__main__":
 
     chrome_browser.wait_for_enter()
     chrome_browser.close()
-
