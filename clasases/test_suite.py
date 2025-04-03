@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+from abc import ABC, abstractmethod
 from selenium.webdriver.remote.webdriver import WebDriver
 
 class TestSuite:
@@ -36,8 +37,10 @@ class TestSuite:
         assert value_test_element == element
         print('Text element = {} is correct'.format(value_test_element))
 
+    @abstractmethod
     def check_error_message(self):
         pass
 
+    @abstractmethod
     def close_error_message(self):
         pass
