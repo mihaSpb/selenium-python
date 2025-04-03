@@ -36,11 +36,3 @@ class TestSuite:
         value_test_element = text_element.text
         assert value_test_element == element
         print('Text element = {} is correct'.format(value_test_element))
-
-    @abstractmethod
-    def check_error_message(self):
-        pass
-
-    @abstractmethod
-    def close_error_message(self):
-        pass
