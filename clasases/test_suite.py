@@ -1,5 +1,4 @@
 from selenium.webdriver.common.by import By
-from abc import ABC, abstractmethod
 from selenium.webdriver.remote.webdriver import WebDriver
 
 class TestSuite:
