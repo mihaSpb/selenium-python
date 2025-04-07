@@ -1,14 +1,7 @@
-from abc import ABC, abstractmethod
-
-
-class BaseBrowser(ABC):
-    def __init__(self, url: str):
+class BrowserController:
+    def __init__(self, driver, url: str):
+        self.driver = driver
         self.url = url
-        self.driver = None
-
-    @abstractmethod
-    def init_driver(self):
-        pass
 
     def launch(self):
         if self.driver:

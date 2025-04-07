@@ -5,13 +5,10 @@ from webdriver_manager.chrome import ChromeDriverManager
 class ChromeBrowser:
     def __init__(self, url: str):
         self.url = url
-        self.driver = self.init_driver()  # Инициализация драйвера происходит здесь
-
-    def init_driver(self):
         options = webdriver.ChromeOptions()
         options.add_experimental_option('detach', False)
         options.add_argument("--headless")  # Запуск в headless режиме
-        return webdriver.Chrome(
+        self.driver = webdriver.Chrome(
             service=ChromeService(ChromeDriverManager().install()),
             options=options
         )

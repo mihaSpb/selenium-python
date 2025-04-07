@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 # Импортируем класс BaseBrowser из папки classes
 from chrome_browser import ChromeBrowser
 # Импортируем класс test_suite из папки classes
-from clasases.test_suite import TestSuite
+from test_suite import TestSuite
 
 
 # Переопределенные методы класса с тестами
