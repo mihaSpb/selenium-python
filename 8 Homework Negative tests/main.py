@@ -14,8 +14,7 @@ class ChromeBrowser(BaseBrowser):
         super().__init__(url)
         self.driver= self.init_driver()
 
-    @staticmethod
-    def init_driver():
+    def init_driver(self):
         options = webdriver.ChromeOptions()
         options.add_experimental_option('detach', False)
         # Запуск браузера в headless режиме
