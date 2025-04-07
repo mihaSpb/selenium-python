@@ -1,27 +1,9 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
 
 # Импортируем класс BaseBrowser из папки classes
-from BaseBrowserABC import BaseBrowser
+from chrome_browser import ChromeBrowser
 # Импортируем класс test_suite из папки classes
 from clasases.test_suite import TestSuite
-
-
-class ChromeBrowser(BaseBrowser):
-    def __init__(self, url: str):
-        super().__init__(url)
-        self.driver= self.init_driver()
-
-    def init_driver(self):
-        options = webdriver.ChromeOptions()
-        options.add_experimental_option('detach', False)
-        # Запуск браузера в headless режиме
-        options.add_argument("--headless")
-        return webdriver.Chrome(
-            service=ChromeService(ChromeDriverManager().install()), options=options
-        )
 
 
 # Переопределенные методы класса с тестами
