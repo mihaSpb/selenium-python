@@ -34,7 +34,7 @@ if __name__ == "__main__":
     chrome_browser.launch()
 
     # Инициализация тестов
-    tests = NegativeTestSuite(chrome_browser.driver)
+    tests = TestSuite(chrome_browser.driver)
     negative_tests = NegativeTestSuite(chrome_browser.driver)
 
     # Тесты
