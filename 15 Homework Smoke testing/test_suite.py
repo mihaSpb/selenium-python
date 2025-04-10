@@ -1,6 +1,9 @@
+import re
 import time
 import datetime
 from pathlib import Path
+
+from faker import Faker
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webdriver import WebDriver
@@ -161,29 +164,84 @@ class TestSuite:
         self.driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-backpack']").click()
 
     def add_product_2(self):
-        product_2 = self.driver.find_element(By.XPATH, "//*[@id='item_4_title_link']")
+        product_2 = self.driver.find_element(By.XPATH, "//*[@id='item_0_title_link']")
         self.value_product_2 = product_2.text
         print(f'Product 2 title = {self.value_product_2}')
 
-        price_product_2 = self.driver.find_element(By.XPATH, "//*[@id='inventory_container']/div/div[1]/div[2]/div[2]/div")
+        price_product_2 = self.driver.find_element(By.XPATH, "//*[@id='inventory_container']/div/div[2]/div[2]/div[2]/div")
         self.value_price_product_2 = price_product_2.text
         print(f'Product 2 price = {self.value_price_product_2}')
 
         # Add to cart product_2
-        self.driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-bike-light']").click()
+        self.driver.find_element(By.XPATH, "//*[@id='add-to-cart-sauce-labs-bike-light']").click()
 
+    def make_order(self):
+        self.driver.find_element(By.XPATH, "// *[ @ id = 'checkout']").click()
+        print('Make order')
+
+    def data_for_order_form(self):
+        fake = Faker()
+        fake_first_name = fake.first_name()
+        fake_last_name = fake.last_name()
+        fake_zip_code = fake.zipcode()
+
+        order_first_name = self.driver.find_element(By.XPATH, "//*[@id='first-name']")
+        order_first_name.send_keys(fake_first_name)
+        print(f'First name = {fake_first_name}')
+
+        order_last_name = self.driver.find_element(By.XPATH, "//*[@id='last-name']")
+        order_last_name.send_keys(fake_last_name)
+        print(f'Last name = {fake_last_name}')
+
+        order_zip_code = self.driver.find_element(By.XPATH, "//*[@id='postal-code']")
+        order_zip_code.send_keys(fake_zip_code)
+        print(f'Zip code = {fake_zip_code}')
+
+    def open_order_for_check_sum(self):
+        self.driver.find_element(By.XPATH, "//*[@id='continue']").click()
 
     def check_product_1(self):
-        self.open_cart()
-        time.sleep(1)
+        order_product_1_title = self.driver.find_element(By.XPATH, "//*[@id='item_4_title_link']/div")
+        value_order_product_1_title = order_product_1_title.text
+        order_product_1_price = self.driver.find_element(By.XPATH, "//*[@id='checkout_summary_container']/div/div[1]/div[3]/div[2]/div[2]/div")
+        self.value_order_product_1_price = order_product_1_price.text
 
-        cart_product_1_title = self.driver.find_element(By.XPATH, "//*[@id='item_4_title_link']")
-        value_cart_product_1_title = cart_product_1_title.text
-        cart_product_1_price = self.driver.find_element(By.XPATH, "//*[@id='cart_contents_container']/div/div[1]/div[3]/div[2]/div[2]/div")
-        value_cart_product_1_price = cart_product_1_price.text
+        assert value_order_product_1_title == self.value_product_1
+        print(f'Product 1 title = {value_order_product_1_title} OK')
 
-        assert value_cart_product_1_title == self.value_product_1
-        print(f'Product 1 title = {value_cart_product_1_title} OK')
+        assert self.value_order_product_1_price == self.value_price_product_1
+        print(f'Product 1 price = {self.value_order_product_1_price} OK')
 
-        assert value_cart_product_1_price == self.value_price_product_1
-        print(f'Product 1 price = {value_cart_product_1_price} OK')
+    def check_product_2(self):
+        order_product_2_title = self.driver.find_element(By.XPATH, "//*[@id='item_0_title_link']/div")
+        value_order_product_2_title = order_product_2_title.text
+        order_product_2_price = self.driver.find_element(By.XPATH, "//*[@id='checkout_summary_container']/div/div[1]/div[4]/div[2]/div[2]/div")
+        self.value_order_product_2_price = order_product_2_price.text
+
+        assert value_order_product_2_title == self.value_product_2
+        print(f'Product 2 title = {value_order_product_2_title} OK')
+
+        assert self.value_order_product_2_price == self.value_price_product_2
+        print(f'Product 2 price = {self.value_order_product_2_price} OK')
+
+    def parse_price_items(self,price_str: str) -> float:
+        # Замена запятой на точку
+        price_str= price_str.replace(',', '.')
+        # Удаление всех символов, кроме запятой и точки
+        price_cleaned = re.sub(r'[^\d.]', '', price_str)
+        return float(price_cleaned)
+
+    def check_order_sum(self):
+        order_sum = self.driver.find_element(By.XPATH, "//*[@id='checkout_summary_container']/div/div[2]/div[6]")
+        value_order_sum_text = order_sum.text
+        value_order_sum = self.parse_price_items(value_order_sum_text)
+        print(f'Order sum = {value_order_sum}')
+
+        check_order_sum = self.parse_price_items(self.value_order_product_1_price) + self.parse_price_items(self.value_order_product_2_price)
+        print(f'Check sum = {check_order_sum}')
+        assert value_order_sum == check_order_sum
+        print(f'Order sum = {value_order_sum} OK')
+
+    def finish_order(self):
+        self.driver.find_element(By.XPATH, "// *[ @ id = 'finish']").click()
+        print('Finish order')
