@@ -18,9 +18,6 @@ if __name__ == "__main__":
     tests.test_password()
     tests.test_button_login()
 
-    # Пауза на появление сообщения о скомпрометированном пароле и нажатии кнопки ESС для его закрытия
-    time.sleep(3)
-
     tests.add_product_1()
     tests.add_product_2()
     time.sleep(0.5)
