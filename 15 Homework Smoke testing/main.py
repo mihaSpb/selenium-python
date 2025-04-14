@@ -16,9 +16,9 @@ if __name__ == "__main__":
     tests.universal_click("//input[@id='login-button']", "Click button login")
     time.sleep(3)
 
-    cart_product = tests.add_something_product("//*[@id='item_4_title_link']", "//*[@id='inventory_container']/div/div[1]/div[2]/div[2]/div",
+    tests.add_something_product("//*[@id='item_4_title_link']", "//*[@id='inventory_container']/div/div[1]/div[2]/div[2]/div",
                                 "//button[@id='add-to-cart-sauce-labs-backpack']", "Sauce Labs Backpack")
-    cart_product = tests.add_something_product("//*[@id='item_0_title_link']", "//*[@id='inventory_container']/div/div[2]/div[2]/div[2]/div",
+    tests.add_something_product("//*[@id='item_0_title_link']", "//*[@id='inventory_container']/div/div[2]/div[2]/div[2]/div",
                                 "//*[@id='add-to-cart-sauce-labs-bike-light']", "Sauce Labs Bike Light")
     time.sleep(0.5)
     tests.universal_click("//a[@data-test='shopping-cart-link']", "Open cart")
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     tests.check_product("//*[@id='item_0_title_link']/div", "//*[@id='checkout_summary_container']/div/div[1]/div[4]/div[2]/div[2]/div",
                         "Sauce Labs Bike Light")
 
-    tests.check_order_sum(cart_product)
+    tests.check_order_sum(tests.products)
     tests.universal_click("//*[@id='finish']", "Finish order")
 
     chrome_browser.close()

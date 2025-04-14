@@ -133,19 +133,11 @@ class TestSuite:
         print(f'Zip code = {fake_zip_code}')
 
     def check_product(self, order_title_locator: str, order_price_locator: str, product_key: str):
-        order_title_element = self.driver.find_element(By.XPATH, order_title_locator)
-        order_title = order_title_element.text
-        order_price_element = self.driver.find_element(By.XPATH, order_price_locator)
-        order_price = order_price_element.text
-
         expected_title = self.products[product_key]["title"]
         expected_price = self.products[product_key]["price"]
 
-        assert order_title == expected_title, f"Expected product title {expected_title}, got {order_title}"
-        print(f'Product {product_key} title = {order_title} OK')
-
-        assert order_price == expected_price, f"Expected product price {expected_price}, got {order_price}"
-        print(f'Product {product_key} price = {order_price} OK')
+        self.check_text_in_element(order_title_locator, expected_title)
+        self.check_text_in_element(order_price_locator, expected_price)
 
     def parse_price_items(self, price_str: str) -> float:
         # Замена запятой на точку
