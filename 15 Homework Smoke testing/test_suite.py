@@ -166,14 +166,3 @@ class TestSuite:
         print(f'Check sum = {total}')
         assert order_sum == total, f"Order sum {order_sum} does not match calculated sum {total}"
         print(f'Order sum = {order_sum} OK')
-
-    # def check_order_sum(self):
-    #     order_sum = self.driver.find_element(By.XPATH, "//*[@id='checkout_summary_container']/div/div[2]/div[6]")
-    #     value_order_sum_text = order_sum.text
-    #     value_order_sum = self.parse_price_items(value_order_sum_text)
-    #     print(f'Order sum = {value_order_sum}')
-    #
-    #     check_order_sum = self.parse_price_items(self.value_order_product_1_price) + self.parse_price_items(self.value_order_product_2_price)
-    #     print(f'Check sum = {check_order_sum}')
-    #     assert value_order_sum == check_order_sum
-    #     print(f'Order sum = {value_order_sum} OK')
