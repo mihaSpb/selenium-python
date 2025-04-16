@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     # Тесты
     tests.universal_click(element_locator, "Select check box")
-    tests.is_element_selected(element_locator)
+    tests.is_element_selected("//*[@id='tree-node-home']")
     time.sleep(2)
 
     chrome_browser.close()

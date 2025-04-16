@@ -2,7 +2,6 @@ from select import select
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.remote.webelement import WebElement
 
 
 class TestSuite:
@@ -18,9 +17,8 @@ class TestSuite:
 
     def is_element_selected(self, locator: str):
         selected = self.driver.find_element(By.XPATH, locator)
-        selected.is_selected()
 
-        if selected:
+        if selected.is_selected():
             print("Element is selected")
         else:
             print("Element is not selected")
