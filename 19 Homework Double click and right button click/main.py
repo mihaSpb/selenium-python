@@ -11,8 +11,8 @@ if __name__ == "__main__":
     tests = TestSuite(chrome_browser.driver)
 
     # Тесты
-    tests.universal_click("//*[@id='doubleClickBtn']", "Double click", action = "double_click")
-    tests.universal_click("//*[@id='rightClickBtn']", "Right click", action = "right_click")
+    tests.universal_click("//*[@id='doubleClickBtn']", "Double click", "double_click")
+    tests.universal_click("//*[@id='rightClickBtn']", "Right click", "right_click")
 
     chrome_browser.wait_for_enter()
     chrome_browser.close()
