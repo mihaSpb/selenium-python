@@ -62,11 +62,6 @@ class TestSuite:
         assert actual_text == expected_text, f'Expected {expected_text}, got {actual_text}'
         print(f'Text element = {actual_text} is correct')
 
-    def highlight_element(self, input_locator: str, label: str):
-        element = self.driver.find_element(By.XPATH, input_locator)
-        element.send_keys(Keys.COMMAND + 'a')
-        print(f'Highlight {label}')
-
     def press_key_in_element(self, button_locator: str, key_text: str, expected_text: str):
         mapping = {
             "ENTER": Keys.ENTER,
