@@ -1,8 +1,8 @@
+import platform
 import re
 import time
 import datetime
 from pathlib import Path
-
 from faker import Faker
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -67,20 +67,40 @@ class TestSuite:
         element.send_keys(Keys.COMMAND + 'a')
         print(f'Highlight {label}')
 
-    def press_key_for_button(self, button_locator: str, key, expected_text: str):
-        key_names = {
-            Keys.ENTER: "ENTER",
-            Keys.BACKSPACE: "BACKSPACE",
-            Keys.DELETE: "DELETE",
-            Keys.ESCAPE: "ESCAPE",
-            Keys.CLEAR: "CLEAR",
+    def press_key_in_element(self, button_locator: str, key_text: str, expected_text: str):
+        mapping = {
+            "ENTER": Keys.ENTER,
+            "BACKSPACE": Keys.BACKSPACE,
+            "DELETE": Keys.DELETE,
+            "ESCAPE": Keys.ESCAPE,
         }
 
-        button = self.driver.find_element(By.XPATH, button_locator)
-        button.send_keys(key)
+        element = self.driver.find_element(By.XPATH, button_locator)
 
-        key_names = key_names.get(key, str(key))
-        print(f'Press {key_names} for {expected_text}')
+        upper_key = key_text.strip().upper()
+
+        if upper_key == "SELECT_ALL":
+            element.click()
+            chain = ActionChains(self.driver)
+            if platform.system() == "Darwin":
+                chain.key_down(Keys.COMMAND).send_keys("a").key_up(Keys.COMMAND)
+            else:
+                chain.key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL)
+            chain.perform()
+            key_name = "SELECT_ALL"
+
+        elif upper_key in mapping:
+            if upper_key != "DELETE":
+                element.click()
+            element.send_keys(mapping[upper_key])
+            key_name = upper_key
+
+        else:
+            element.click()
+            element.send_keys(key_text)
+            key_name = key_text
+
+        print(f'Press {key_name} for {expected_text}')
 
     def make_screenshot(self):
         now_date = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
