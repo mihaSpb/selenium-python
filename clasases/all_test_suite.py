@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.select import Select
 
 
 class TestSuite:
@@ -211,3 +212,52 @@ class TestSuite:
             f"В поле Value {displayed_value}, а значение слайдера – {actual}"
         )
         print(f'Проверка пройдена: {displayed_value} == {actual}')
+
+    def click(self, locator: str, message: str = ""):
+        element = self.driver.find_element(By.XPATH, locator)
+        element.click()
+        print(f"Clicked {message}")
+
+    def input_text(self, locator: str, message: str = ""):
+        element = self.driver.find_element(By.XPATH, locator)
+        element.send_keys(message)
+        element.send_keys(Keys.RETURN)
+        print(f"Input {message}")
+
+    def select_dropdown(self, locator: str, value: str):
+        select_element = self.driver.find_element(By.XPATH, locator)
+        select = Select(select_element)
+
+        select.select_by_visible_text(value)
+        print(f"Selected {value}")
+
+    def universal_select_dropdown(self, select_locator: str, by: str, value):
+        """
+        Универсальный выбор в <select> через Selenium Select.
+
+        Аргументы:
+          select_locator — XPath/локатор <select> элемента
+          by — способ выбора: 'visible_text', 'value', 'index'
+          value — строка текста / значение value / индекс (int)
+        """
+        select_el = self.driver.find_element(By.XPATH, select_locator)
+        sel = Select(select_el)  # класс для <select> :contentReference[oaicite:0]{index=0}
+
+        if by == 'visible_text':
+            sel.select_by_visible_text(value)  # по видимому тексту :contentReference[oaicite:1]{index=1}
+            method = f"visible text '{value}'"
+        elif by == 'value':
+            sel.select_by_value(value)  # по атрибуту value :contentReference[oaicite:2]{index=2}
+            method = f"value '{value}'"
+        elif by == 'index':
+            sel.select_by_index(int(value))  # по индексу :contentReference[oaicite:3]{index=3}
+            method = f"index {value}"
+        else:
+            raise ValueError("by должен быть 'visible_text', 'value' или 'index'")
+
+        print(f"Selected option by {method} in {select_locator}")
+
+    def input_text_to_drop_element(self, locator: str, input_text: str = ""):
+        element = self.driver.find_element(By.XPATH, locator)
+        element.send_keys(input_text)
+        element.send_keys(Keys.RETURN)
