@@ -213,11 +213,6 @@ class TestSuite:
         )
         print(f'Проверка пройдена: {displayed_value} == {actual}')
 
-    def click(self, locator: str, message: str = ""):
-        element = self.driver.find_element(By.XPATH, locator)
-        element.click()
-        print(f"Clicked {message}")
-
     def input_text(self, locator: str, message: str = ""):
         element = self.driver.find_element(By.XPATH, locator)
         element.send_keys(message)
