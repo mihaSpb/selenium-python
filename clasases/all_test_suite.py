@@ -277,3 +277,8 @@ class TestSuite:
         result_sum = float(result_element.text.strip())
         assert expected_sum == result_sum, f"Expected {expected_sum} but got {result_sum}"
         print(f"Text matches: {result_sum} == {expected_sum}")
+
+    def switch_to_iframe (self, iframe_locator: str):
+        iframe = self.driver.find_element(By.XPATH, iframe_locator)
+        self.driver.switch_to.frame(iframe)
+        print("Switching to iFrame")
