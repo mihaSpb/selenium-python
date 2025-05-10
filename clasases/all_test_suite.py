@@ -57,11 +57,10 @@ class TestSuite:
         assert current_url == expected_url, f'Expected {expected_url}, got {current_url}'
         print(f'Current url = {current_url} is correct')
 
-    def check_text_in_element(self, element_locator: str, expected_text: str):
-        title_element = self.driver.find_element(By.XPATH, element_locator)
-        actual_text = title_element.text
-        assert actual_text == expected_text, f'Expected {expected_text}, got {actual_text}'
-        print(f'Text element = {actual_text} is correct')
+    def check_text_in_element(self, expected_text: str, result_locator: str):
+        result_text = self.driver.find_element(By.XPATH, result_locator).text.strip()
+        assert result_text == expected_text, f"Expected {expected_text} but got {result_text}"
+        print(f"Text matches: {expected_text}")
 
     def press_key_in_element(self, button_locator: str, key_text: str, expected_text: str):
         mapping = {
@@ -215,6 +214,7 @@ class TestSuite:
 
     def input_text(self, locator: str, message: str = ""):
         element = self.driver.find_element(By.XPATH, locator)
+        element.clear()
         element.send_keys(message)
         element.send_keys(Keys.RETURN)
         print(f"Input {message}")
@@ -256,3 +256,25 @@ class TestSuite:
         element = self.driver.find_element(By.XPATH, locator)
         element.send_keys(input_text)
         element.send_keys(Keys.RETURN)
+
+    def sum_and_validate(self, first_locator: str,
+                         second_locator: str,
+                         button_locator: str,
+                         result_locator: str,
+                         first_value: str,
+                         second_value: str,
+                         delay: float = 0.5):
+        self.input_text(first_locator, first_value)
+        time.sleep(delay)
+
+        self.input_text(second_locator, second_value)
+        time.sleep(delay)
+
+        self.click(button_locator)
+        time.sleep(delay)
+
+        expected_sum = float(first_value) + float(second_value)
+        result_element = self.driver.find_element(By.XPATH, result_locator)
+        result_sum = float(result_element.text.strip())
+        assert expected_sum == result_sum, f"Expected {expected_sum} but got {result_sum}"
+        print(f"Text matches: {result_sum} == {expected_sum}")
