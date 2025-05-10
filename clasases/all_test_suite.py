@@ -71,7 +71,6 @@ class TestSuite:
         }
 
         element = self.driver.find_element(By.XPATH, button_locator)
-
         upper_key = key_text.strip().upper()
 
         if upper_key == "SELECT_ALL":
