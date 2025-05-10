@@ -22,7 +22,6 @@ class TestSuite:
 
     def check_text_in_element(self, expected_text: str, result_locator: str):
         result_text = self.driver.find_element(By.XPATH, result_locator).text.strip()
-
         assert result_text == expected_text, f"Expected {expected_text} but got {result_text}"
         print(f"Text matches: {expected_text}")
 
