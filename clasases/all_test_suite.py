@@ -282,3 +282,13 @@ class TestSuite:
         iframe = self.driver.find_element(By.XPATH, iframe_locator)
         self.driver.switch_to.frame(iframe)
         print("Switching to iFrame")
+
+    def select_all_text(self, locator: str):
+        element = self.driver.find_element(By.XPATH, locator)
+        chain = ActionChains(self.driver)
+
+        if platform.system() == "Darwin":
+            chain.key_down(Keys.COMMAND).send_keys("a").key_up(Keys.COMMAND)
+        else:
+            chain.key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL)
+        chain.perform()
