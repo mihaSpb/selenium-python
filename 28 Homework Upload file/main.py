@@ -10,7 +10,7 @@ if __name__ == "__main__":
     chrome_browser.launch()
     tests = TestSuite(chrome_browser.driver)
 
-    path_to_file = "/Upload_download files/Sl8EKR35AQc.jpg"
+    path_to_file = "/upload_files/Sl8EKR35AQc.jpg"
     upload_file_button = "//*[@id='file']"
 
     # Tests
