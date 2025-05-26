@@ -30,7 +30,6 @@ class TestSuite:
             else:
                 print(f"{file} size is null")
 
-
     # Не использует self внутри себя, поэтому делаю данный метод статичным
     @staticmethod
     def remove_files(download_dir: str):
