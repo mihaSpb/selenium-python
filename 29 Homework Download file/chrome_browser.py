@@ -9,7 +9,7 @@ class ChromeBrowser:
         self.url = url
 
         # Проверяем наличие папки для скачивания
-        os.makedirs(download_dir, exist_ok=True)
+        os.makedirs(download_dir, exist_ok = True)
 
         options = webdriver.ChromeOptions()
 

@@ -14,9 +14,12 @@ class TestSuite:
         element.click()
         print(f"Clicked {message}")
 
-    def verify_file_downloaded(self, file_name: str, download_dir: str):
+    # Не использует self внутри себя, поэтому делаю данный метод статичным
+    @staticmethod
+    def verify_file_downloaded(file_name: str, download_dir: str):
         file_path = download_dir + "/" + file_name
-        assert os.access(file_path, os.F_OK) == True
+
+        assert os.access(file_path, os.F_OK) is not True
         print (f"File {file_name} downloaded")
 
         files = glob.glob(os.path.join(download_dir, "*"))
@@ -27,7 +30,10 @@ class TestSuite:
             else:
                 print(f"{file} size is null")
 
-    def remove_files(self, download_dir: str):
+
+    # Не использует self внутри себя, поэтому делаю данный метод статичным
+    @staticmethod
+    def remove_files(download_dir: str):
         files = glob.glob(os.path.join(download_dir, "*"))
         for file in files:
             os.remove(file)
