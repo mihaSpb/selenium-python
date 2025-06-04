@@ -34,7 +34,3 @@ class ChromeBrowser:
     def close(self):
         if self.driver:
             self.driver.quit()
-
-    @staticmethod
-    def wait_for_enter():
-        input("Нажмите Enter, чтобы закрыть браузер и продолжить...")
