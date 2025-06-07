@@ -22,3 +22,8 @@ class TestSuite:
             element = self.driver.find_element(By.XPATH, locator)
             element.click()
             print(f"Clicked {message} after refresh page")
+
+    def wait_invisible_button(self, locator: str, timeout: int, message: str = ""):
+        visible_button = WebDriverWait(self.driver, timeout).until(EC.element_to_be_clickable((By.XPATH, locator)))
+        visible_button.click()
+        print(f"Clicked {message}")

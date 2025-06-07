@@ -12,7 +12,8 @@ if __name__ == "__main__":
     visible_button = "//*[@id='visibleAfter']"
 
     # Tests
-    tests.click_to_invisible_button(visible_button, 'visible button')
+    #tests.click_to_invisible_button(visible_button, 'visible button')
+    tests.wait_invisible_button(visible_button, 20, 'visible button')
     time.sleep(2)
 
 
