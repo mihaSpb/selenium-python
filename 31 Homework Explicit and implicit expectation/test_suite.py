@@ -1,10 +1,14 @@
-import platform
+import re
 import time
+import platform
 import pyautogui
+
+from faker import Faker
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 
 
@@ -36,7 +40,7 @@ class TestSuite:
         print('Input password')
 
     @staticmethod
-    def press_escape_to_dismiss_alert(timeout = 5):
+    def press_escape_to_dismiss_alert(timeout = 3):
         system = platform.system()
         print(f"Detected OS: {system}")
 
@@ -79,3 +83,100 @@ class TestSuite:
         )
         add_to_cart.click()
         print(f"Added to cart: {product_name}")
+
+        self.driver.find_element(
+            By.XPATH, f"//div[text()='{product_name}']"
+        ).click()
+
+    def get_product_details(self):
+        name = self.driver.find_element(By.CLASS_NAME, "inventory_details_name").text
+        price = self.driver.find_element(By.CLASS_NAME, "inventory_details_price").text
+
+        print(f"Detail page: {name} — {price}")
+        return name, price
+
+    def verify_in_cart(self, expected_name, expected_price):
+        name = self.driver.find_element(
+            By.CLASS_NAME, "inventory_item_name"
+        ).text
+
+        price = self.driver.find_element(
+            By.CLASS_NAME, "inventory_item_price"
+        ).text
+
+        assert name == expected_name, f"Name mismatch: {name} != {expected_name}"
+        assert price == expected_price, f"Price mismatch: {price} != {expected_price}"
+        print("Verified item in cart")
+
+    def data_for_order_form(self):
+        fake = Faker()
+        fake_first_name = fake.first_name()
+        fake_last_name = fake.last_name()
+        fake_zip_code = fake.zipcode()
+
+        order_first_name = self.driver.find_element(By.XPATH, "//*[@id='first-name']")
+        order_first_name.send_keys(fake_first_name)
+        print(f'First name = {fake_first_name}')
+
+        order_last_name = self.driver.find_element(By.XPATH, "//*[@id='last-name']")
+        order_last_name.send_keys(fake_last_name)
+        print(f'Last name = {fake_last_name}')
+
+        order_zip_code = self.driver.find_element(By.XPATH, "//*[@id='postal-code']")
+        order_zip_code.send_keys(fake_zip_code)
+        print(f'Zip code = {fake_zip_code}')
+
+    def parse_price(self, price_str: str) -> float:
+        # убираем всё, кроме цифр и точки
+        cleaned = re.sub(r'[^\d.]', '', price_str)
+        return float(cleaned)
+
+    def check_order_sum(self, expected_prices: float, timeout: int = 10):
+        # Ждём, пока строка с суммой появится
+        locator = (By.CLASS_NAME, "summary_subtotal_label")
+        element = WebDriverWait(self.driver, timeout).until(
+            EC.visibility_of_element_located(locator)
+        )
+
+        item_total = self.parse_price(element.text)
+        assert abs(item_total - expected_prices) < 1e-2, (
+            f"Order sum mismatch: actual {item_total} vs expected {expected_prices}"
+        )
+        print(f"Item total OK: {item_total}")
+
+
+    def check_tax_and_total(self, timeout: int = 10):
+        wait = WebDriverWait(self.driver, timeout)
+        sub_el = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "summary_subtotal_label")))
+        tax_el = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "summary_tax_label")))
+        tot_el = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "summary_total_label")))
+
+        # Парсим общую сумму заказа и Tax
+        item_total = self.parse_price(sub_el.text)
+        tax = self.parse_price(tax_el.text)
+        total_page = self.parse_price(tot_el.text)
+
+        # Проверяем сумму
+        expected_total = item_total + tax
+        assert abs(total_page - expected_total) < 1e-2, (
+            f"Total mismatch: item_total({item_total}) + tax({tax}) = {expected_total}, "
+            f"but page shows {total_page}"
+        )
+        print(f"Tax and total OK: {item_total} + {tax} = {total_page}")
+
+    def verify_order_complete(self, timeout = 10):
+        try:
+            el = WebDriverWait(self.driver, timeout).until(
+                EC.visibility_of_element_located((By.CLASS_NAME, "complete-header"))
+            )
+        except TimeoutException:
+            raise AssertionError(
+                f"Order confirmation message did not appear within {timeout} seconds"
+            )
+
+        msg = el.text.strip()
+        expected = "Thank you for your order!"
+        assert msg == expected, (
+            f"Expected confirmation '{expected}', but got '{msg}'"
+        )
+        print(f"Order completed: '{msg}'")
