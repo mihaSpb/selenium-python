@@ -12,11 +12,14 @@ class ChromeBrowser:
         prefs = {
             "credentials_enable_service": False,
             "profile.password_manager_enabled": False,
+            "profile.password_manager_bubble_enabled": False
         }
         options.add_experimental_option("prefs", prefs)
 
         # Отключаем предупреждение о скомпрометированном пароле
         options.add_argument("--disable-features=PasswordLeakDetection")
+        options.add_argument("--disable-save-password-bubble")
+        options.add_argument("--disable-password-manager-reauthentication")
 
         options.add_experimental_option('detach', True)
         self.driver = webdriver.Chrome(
