@@ -10,33 +10,17 @@ if __name__ == "__main__":
     tests = TestSuite(chrome_browser.driver)
 
     login_button = "//input[@id='login-button']"
-    visible_button = "//*[@id='visibleAfter']"
+    open_cart_button = "//a[@data-test='shopping-cart-link']"
 
     # Tests
     tests.input_login()
     tests.input_password()
-    tests.universal_click(login_button, "Login")
+    tests.click_button(login_button, "Login")
 
-    tests.press_escape_to_dismiss_alert(10)
-    time.sleep(2)
+    tests.press_escape_to_dismiss_alert()
+    product_name = tests.user_menu()
+    tests.add_to_cart(product_name)
+    time.sleep(1)
+    tests.click_button(open_cart_button, "Open cart")
 
-    chrome_browser.close()
-
-    def user_menu(self):
-        product = {
-            "1": "Sauce Labs Backpack",
-            "2": "Sauce Labs Bike Light",
-            "3": "Sauce Labs Bolt T-Shirt",
-            "4": "Sauce Labs Fleece Jacket",
-            "5": "Sauce Labs Onesie",
-            "6": "Test.allTheThings() T-Shirt (Red)"
-        }
-
-        print("Приветствую тебя в нашем интернет-магазине")
-        print("Выбери один из следующих товаров и укажи его номер:\n"
-              "1 - Sauce Labs Backpack,\n"
-              "2 - Sauce Labs Bike Light,\n"
-              "3 - Sauce Labs Bolt T-Shirt,\n"
-              "4 - Sauce Labs Fleece Jacket,\n"
-              "5 - Sauce Labs Onesie,\n"
-              "6 - Test.allTheThings() T-Shirt (Red)")
+    #chrome_browser.close()

@@ -4,13 +4,15 @@ import pyautogui
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class TestSuite:
     def __init__(self, driver: WebDriver):
         self.driver = driver
 
-    def universal_click(self, locator: str, message: str = ""):
+    def click_button(self, locator: str, message: str = ""):
         element = self.driver.find_element(By.XPATH, locator)
         element.click()
         if message:
@@ -42,4 +44,38 @@ class TestSuite:
         print("Simulating ESC key press to close sistem alert")
         pyautogui.press('esc')
 
+    def user_menu(self):
+        products = {
+            "1": "Sauce Labs Backpack",
+            "2": "Sauce Labs Bike Light",
+            "3": "Sauce Labs Bolt T-Shirt",
+            "4": "Sauce Labs Fleece Jacket",
+            "5": "Sauce Labs Onesie",
+            "6": "Test.allTheThings() T-Shirt (Red)"
+        }
 
+        print("\nПриветствую тебя в нашем интернет-магазине")
+        print("Выбери один из следующих товаров и укажи его номер:")
+
+        for num, name in products.items():
+            print(f" {num} - {name},")
+        while True:
+            choice = input("Введите номер товара (1–6): ").strip()
+            if choice in products:
+                print(f"Вы выбрали: {products[choice]}")
+                return products[choice]
+            print("Неверный ввод, попробуйте ещё раз.")
+
+    def add_to_cart(self, product_name: str, timeout: int = 5):
+        # Ждём загрузки страницы и находим кнопку добавления товара в корзину
+        xpath_button = (
+            f"//div[text()='{product_name}']"
+            "/ancestor::div[@class='inventory_item']"
+            "//button[contains(text(), 'Add to cart')]"
+        )
+
+        add_to_cart = WebDriverWait(self.driver, timeout).until(
+            EC.element_to_be_clickable((By.XPATH, xpath_button))
+        )
+        add_to_cart.click()
+        print(f"Added to cart: {product_name}")
