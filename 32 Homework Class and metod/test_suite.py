@@ -1,15 +1,10 @@
-import re
 import time
 import platform
 import pyautogui
 
-from faker import Faker
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class TestSuite:
