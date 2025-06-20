@@ -12,7 +12,7 @@ class Test():
         driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()))
         base_url = "https://www.saucedemo.com/"
         driver.get(base_url)
-        driver.set_window_size(1920, 1080)
+        driver.maximize_window()
 
         login = LoginPage(driver)
         login.login_user(login_name="standard_user", login_password="secret_sauce")
